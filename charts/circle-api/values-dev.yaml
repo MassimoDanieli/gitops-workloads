@@ -1,3 +1,3 @@
 image:
-  repository: ghcr.io/massimodanieli/circle-api
+  repository: ghcr.io/massimodanieli/circle-api:sha-ece5ad124bf23f5dd6e09536edcbfb2a35e59149
   tag: "sha-38bf6f7e0e1071d05f543f5ba60aae7aa206111f"

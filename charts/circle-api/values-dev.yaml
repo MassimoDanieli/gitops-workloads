@@ -1,3 +1,3 @@
 image:
-  repository: ghcr.io/massimodanieli/circle-api
-  tag: "main"
+  repository: nginx
+  tag: "1.27-alpine"

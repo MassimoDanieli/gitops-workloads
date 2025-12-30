@@ -6,7 +6,7 @@ metadata:
 spec:
   project: workloads
   source:
-    repoURL: https://github.com/MassimoDanieli/gitops-workloads.git
+    repoURL: git@github.com:MassimoDanieli/gitops-workloads.git
     targetRevision: main
     path: charts/circle-api
     helm:

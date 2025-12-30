@@ -3,6 +3,13 @@ kind: Application
 metadata:
   name: circle-api-dev
   namespace: argocd
+  metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: app=ghcr.io/massimodanieli/circle-api
+    argocd-image-updater.argoproj.io/app.update-strategy: digest
+    argocd-image-updater.argoproj.io/write-back-method: git:gitops-workloads-writer
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:charts/circle-api/values-dev.yaml
+
 spec:
   project: workloads
   source:

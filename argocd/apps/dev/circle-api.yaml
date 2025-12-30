@@ -5,10 +5,12 @@ metadata:
   namespace: argocd
   metadata:
   annotations:
-    argocd-image-updater.argoproj.io/image-list: app=ghcr.io/massimodanieli/circle-api
-    argocd-image-updater.argoproj.io/app.update-strategy: digest
-    argocd-image-updater.argoproj.io/write-back-method: git:gitops-workloads-writer
-    argocd-image-updater.argoproj.io/write-back-target: helmvalues:charts/circle-api/values-dev.yaml
+    argocd-image-updater.argoproj.io/image-list: circleapi=ghcr.io/massimodanieli/circle-api
+    argocd-image-updater.argoproj.io/circleapi.helm.image-tag: image.tag
+    argocd-image-updater.argoproj.io/circleapi.allow-tags: regexp:^sha-[0-9a-f]{7,40}$
+    argocd-image-updater.argoproj.io/circleapi.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues
 
 spec:
   project: workloads

@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/massimodanieli/circle-api
-  tag: "latest"
+  tag: "main"
   pullPolicy: IfNotPresent
 
 service:

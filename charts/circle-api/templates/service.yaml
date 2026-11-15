@@ -2,10 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: circle-api
+  labels:
+    app: circle-api
 spec:
   type: {{ .Values.service.type }}
   selector:
     app: circle-api
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+    - name: http
+      port: {{ .Values.service.port }}
+      # The container's named port (8000), not the Service port: before, both
+      # were 8080 while uvicorn listens on 8000, so the Service reached nothing.
+      targetPort: http

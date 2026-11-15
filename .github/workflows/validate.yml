@@ -1,0 +1,41 @@
+name: Validate manifests
+
+# Argo CD syncs main automatically: a chart that does not render, or renders
+# invalid Kubernetes objects, should fail here instead of in the cluster.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  chart:
+    runs-on: ubuntu-latest
+    env:
+      KUBECONFORM_VERSION: v0.8.0
+    steps:
+      - uses: actions/checkout@v7
+      - uses: azure/setup-helm@v5
+      - name: Install kubeconform
+        run: |
+          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" | tar xz kubeconform
+          sudo mv kubeconform /usr/local/bin/
+      - name: Lint (values.schema.json is enforced)
+        run: helm lint charts/circle-api -f charts/circle-api/values-dev.yaml
+      - name: Render and validate against the Kubernetes schemas
+        run: |
+          set -euo pipefail
+          for extra in "" "--set ingress.enabled=true"; do
+            # shellcheck disable=SC2086
+            helm template circle-api charts/circle-api -f charts/circle-api/values-dev.yaml $extra \
+              | kubeconform -strict -summary
+          done
+      - name: The Service targets the port the app listens on
+        run: |
+          helm template circle-api charts/circle-api -f charts/circle-api/values-dev.yaml > rendered.yaml
+          grep -q 'containerPort: 8000' rendered.yaml
+          grep -q 'targetPort: http' rendered.yaml
+      - name: Argo CD manifests are valid YAML
+        run: python3 -c "import yaml,glob; [list(yaml.safe_load_all(open(f))) for f in glob.glob('argocd/**/*.yaml', recursive=True)]"

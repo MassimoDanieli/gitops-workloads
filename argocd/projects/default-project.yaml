@@ -5,11 +5,15 @@ metadata:
   namespace: argocd
 spec:
   description: Workloads GitOps
+  # Only this repository, only workload namespaces, and the only cluster-scoped
+  # kind the apps need (CreateNamespace=true). It used to allow any repo, any
+  # namespace and every cluster-scoped kind (ClusterRoles, CRDs, ...).
   sourceRepos:
-    - '*'
+    - git@github.com:MassimoDanieli/gitops-workloads.git
+    - https://github.com/MassimoDanieli/gitops-workloads.git
   destinations:
-    - namespace: '*'
+    - namespace: 'circle-api-*'
       server: https://kubernetes.default.svc
   clusterResourceWhitelist:
-    - group: '*'
-      kind: '*'
+    - group: ''
+      kind: Namespace

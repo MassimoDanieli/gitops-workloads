@@ -10,7 +10,10 @@
     "image": {
       "type": "object",
       "additionalProperties": true,
-      "required": ["repository", "tag"],
+      "required": [
+        "repository",
+        "tag"
+      ],
       "properties": {
         "repository": {
           "type": "string",
@@ -25,13 +28,45 @@
           "minLength": 1,
           "description": "Image tag ONLY (e.g. main or sha-<40hex>)",
           "anyOf": [
-            { "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$" },
-            { "pattern": "^sha-[0-9a-f]{40}$" }
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
+            },
+            {
+              "pattern": "^sha-[0-9a-f]{40}$"
+            }
           ]
         },
         "pullPolicy": {
           "type": "string",
-          "enum": ["Always", "IfNotPresent", "Never"]
+          "enum": [
+            "Always",
+            "IfNotPresent",
+            "Never"
+          ]
+        }
+      }
+    },
+    "containerPort": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65535,
+      "description": "Port the app listens on inside the container"
+    },
+    "service": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ClusterIP",
+            "NodePort",
+            "LoadBalancer"
+          ]
         }
       }
     }

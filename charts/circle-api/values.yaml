@@ -5,6 +5,9 @@ image:
   tag: "main"
   pullPolicy: IfNotPresent
 
+# Port uvicorn listens on inside the container (see the circle-api Dockerfile).
+containerPort: 8000
+
 service:
   type: ClusterIP
   port: 8080
@@ -14,3 +17,23 @@ ingress:
   className: nginx
   host: circle-api.local
   path: /
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
+
+# The image runs as uid 10001; setting it here also works with older root images.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
